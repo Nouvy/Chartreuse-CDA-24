@@ -20,16 +20,6 @@ class ProductType extends AbstractType
             ->add('ht_price')
             ->add('vat_rate')
             ->add('stock')
-            ->add('orders', EntityType::class, [
-                'class' => Order::class,
-'choice_label' => 'id',
-'multiple' => true,
-            ])
-            ->add('carts', EntityType::class, [
-                'class' => Cart::class,
-'choice_label' => 'id',
-'multiple' => true,
-            ])
         ;
     }
 

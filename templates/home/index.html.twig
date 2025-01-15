@@ -1,38 +1,124 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Bienvenue sur notre site{% endblock %}
+{% block stylesheets %}
+    <link rel="stylesheet" href="{{ asset('assets/css/home.css') }}">
+{% endblock %}
+
+{% block title %}Accueil - Notre Boutique en Ligne{% endblock %}
 
 {% block body %}
-    <div class="container mt-5">
-        <div class="row justify-content-center">
-            <div class="col-md-8">
-                <div class="text-center">
-                    <h1 class="display-4">Bienvenue, {{ controller_name }}!</h1>
-                    <p class="lead">Une interface élégante pour tous vos besoins.</p>
+    {# Banner Section #}
+    <div class="hero-banner">
+        <div class="container">
+            <div class="row align-items-center min-vh-50">
+                <div class="col-md-6">
+                    <h1 class="display-4 fw-bold">Découvrez nos nouveautés</h1>
+                    <p class="lead">Profitez de -20% sur votre première commande</p>
+                    <a href="" class="btn btn-primary btn-lg">Voir les produits</a>
                 </div>
-                <div class="d-flex justify-content-center mt-4">
-                    <a href="{{ path('app_login') }}" class="btn btn-primary btn-lg mx-2">Connexion</a>
-                    <a href="{{ path('app_register') }}" class="btn btn-outline-secondary btn-lg mx-2">Inscription</a>
+                <div class="col-md-6">
+                    <img src="https://images.unsplash.com/photo-1607082349566-187342175e2f?w=800&auto=format&fit=crop" 
+                         alt="Banner" class="img-fluid rounded shadow">
                 </div>
             </div>
         </div>
     </div>
 
-    <style>
-        body {
-            background-color: #f8f9fa;
-        }
-        .display-4 {
-            font-weight: bold;
-            color: #343a40;
-        }
-        .lead {
-            font-size: 1.25rem;
-            color: #6c757d;
-        }
-        .btn {
-            padding: 0.75rem 1.5rem;
-            font-size: 1.1rem;
-        }
-    </style>
+    {# Categories Section #}
+    <section class="categories-section py-5">
+        <div class="container">
+            <h2 class="section-title text-center mb-4">Nos Catégories</h2>
+            <div class="row g-4">
+                <div class="col-md-3">
+                    <div class="category-card">
+                        <img src="https://images.unsplash.com/photo-1498049794561-7780e7231661?w=400&auto=format&fit=crop" 
+                             alt="Électronique" class="img-fluid rounded">
+                        <h3>Électronique</h3>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="category-card">
+                        <img src="https://images.unsplash.com/photo-1445205170230-053b83016050?w=400&auto=format&fit=crop" 
+                             alt="Mode" class="img-fluid rounded">
+                        <h3>Mode</h3>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="category-card">
+                        <img src="https://images.unsplash.com/photo-1484101403633-562f891dc89a?w=400&auto=format&fit=crop" 
+                             alt="Maison" class="img-fluid rounded">
+                        <h3>Maison</h3>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="category-card">
+                        <img src="https://images.unsplash.com/photo-1517836357463-d25dfeac3438?w=400&auto=format&fit=crop" 
+                             alt="Sport" class="img-fluid rounded">
+                        <h3>Sport</h3>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    {# Featured Products Section #}
+    <section class="featured-products py-5 bg-light">
+        <div class="container">
+            <h2 class="section-title text-center mb-4">Nos Produits</h2>
+            <div class="row g-4">
+                {% for product in products %}
+                    <div class="col-md-3">
+                        <div class="card product-card h-100">
+                            <div class="card-body">
+                                <h5 class="card-title">{{ product.name }}</h5>
+                                <p class="card-text">{{ product.description }}</p>
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div class="price-block">
+                                        <span class="price">{{ product.htPrice }}€ HT</span>
+                                        <br>
+                                        <small class="text-muted">
+                                            TVA: {{ product.vatRate }}%
+                                        </small>
+                                        <br>
+                                        <strong class="ttc-price">
+                                            {{ (product.htPrice * (1 + product.vatRate/100))|number_format(2, ',', ' ') }}€ TTC
+                                        </strong>
+                                    </div>
+                                    <div class="stock-info {% if product.stock < 10 %}text-danger{% endif %}">
+                                        Stock: {{ product.stock }}
+                                    </div>
+                                </div>
+                                <div class="mt-3">
+                                    <a href="#" class="btn btn-primary w-100">Ajouter au panier</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    </section>
+
+    {# Features Section #}
+    <section class="features-section py-5">
+        <div class="container">
+            <div class="row g-4">
+                <div class="col-md-4 text-center">
+                    <i class="fas fa-truck fa-3x mb-3"></i>
+                    <h4>Livraison Gratuite</h4>
+                    <p>Pour toute commande supérieure à 50€</p>
+                </div>
+                <div class="col-md-4 text-center">
+                    <i class="fas fa-lock fa-3x mb-3"></i>
+                    <h4>Paiement Sécurisé</h4>
+                    <p>Transactions 100% sécurisées</p>
+                </div>
+                <div class="col-md-4 text-center">
+                    <i class="fas fa-headset fa-3x mb-3"></i>
+                    <h4>Service Client 24/7</h4>
+                    <p>Une équipe à votre écoute</p>
+                </div>
+            </div>
+        </div>
+    </section>
 {% endblock %}

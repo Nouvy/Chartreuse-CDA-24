@@ -10,27 +10,33 @@
                 <div class="position-sticky pt-3">
                     <ul class="nav flex-column">
                         <li class="nav-item">
-                            <a class="nav-link active" href="#">
+                            <a class="nav-link active" href="{{ path('app_cart_index') }}">
                                 <span data-feather="home"></span>
-                                Tableau de bord
+                                Panier
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="#">
+                            <a class="nav-link" href="{{ path('app_product_index') }}">
                                 <span data-feather="file"></span>
-                                Documents
+                                Produits
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="#">
+                            <a class="nav-link" href="{{ path('app_order_index') }}">
                                 <span data-feather="shopping-cart"></span>
                                 Commandes
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="#">
+                            <a class="nav-link" href="{{ path('app_user_index') }}">
                                 <span data-feather="users"></span>
                                 Utilisateurs
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ path('app_payment_index') }}">
+                                <span data-feather="users"></span>
+                                Paiements
                             </a>
                         </li>
                     </ul>
