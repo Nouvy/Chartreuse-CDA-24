@@ -17,7 +17,7 @@
                     <a href="" class="btn btn-primary btn-lg">Voir les produits</a>
                 </div>
                 <div class="col-md-6">
-                    <img src="https://images.unsplash.com/photo-1607082349566-187342175e2f?w=800&auto=format&fit=crop" 
+                    <img src="https://images.unsplash.com/photo-1607082349566-187342175e2f?w=800&auto=format&fit=crop"
                          alt="Banner" class="img-fluid rounded shadow">
                 </div>
             </div>
@@ -31,28 +31,28 @@
             <div class="row g-4">
                 <div class="col-md-3">
                     <div class="category-card">
-                        <img src="https://images.unsplash.com/photo-1498049794561-7780e7231661?w=400&auto=format&fit=crop" 
+                        <img src="https://images.unsplash.com/photo-1498049794561-7780e7231661?w=400&auto=format&fit=crop"
                              alt="Électronique" class="img-fluid rounded">
                         <h3>Électronique</h3>
                     </div>
                 </div>
                 <div class="col-md-3">
                     <div class="category-card">
-                        <img src="https://images.unsplash.com/photo-1445205170230-053b83016050?w=400&auto=format&fit=crop" 
+                        <img src="https://images.unsplash.com/photo-1445205170230-053b83016050?w=400&auto=format&fit=crop"
                              alt="Mode" class="img-fluid rounded">
                         <h3>Mode</h3>
                     </div>
                 </div>
                 <div class="col-md-3">
                     <div class="category-card">
-                        <img src="https://images.unsplash.com/photo-1484101403633-562f891dc89a?w=400&auto=format&fit=crop" 
+                        <img src="https://images.unsplash.com/photo-1484101403633-562f891dc89a?w=400&auto=format&fit=crop"
                              alt="Maison" class="img-fluid rounded">
                         <h3>Maison</h3>
                     </div>
                 </div>
                 <div class="col-md-3">
                     <div class="category-card">
-                        <img src="https://images.unsplash.com/photo-1517836357463-d25dfeac3438?w=400&auto=format&fit=crop" 
+                        <img src="https://images.unsplash.com/photo-1517836357463-d25dfeac3438?w=400&auto=format&fit=crop"
                              alt="Sport" class="img-fluid rounded">
                         <h3>Sport</h3>
                     </div>
@@ -89,7 +89,15 @@
                                     </div>
                                 </div>
                                 <div class="mt-3">
-                                    <a href="#" class="btn btn-primary w-100">Ajouter au panier</a>
+                                    <form action="{{ path('app_cart_add', {'id': product.id}) }}" method="post">
+                                        <button type="submit" class="btn btn-primary w-100" {% if product.stock <= 0 %}disabled{% endif %}>
+                                            {% if product.stock > 0 %}
+                                                Ajouter au panier
+                                            {% else %}
+                                                Rupture de stock
+                                            {% endif %}
+                                        </button>
+                                    </form>
                                 </div>
                             </div>
                         </div>

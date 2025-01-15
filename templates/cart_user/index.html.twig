@@ -1,0 +1,90 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Mon Panier{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ asset('assets/css/cart_user.css') }}">
+{% endblock %}
+
+{% block body %}
+<div class="container py-5">
+    <h1 class="mb-4">Mon Panier</h1>
+
+    {% if cart and cart.products|length > 0 %}
+        <div class="row">
+            <div class="col-md-8">
+                <div class="card">
+                    <div class="card-body">
+                        <table class="table cart-table">
+                            <thead>
+                                <tr>
+                                    <th>Produit</th>
+                                    <th>Prix HT</th>
+                                    <th>TVA</th>
+                                    <th>Prix TTC</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for product in cart.products %}
+                                    <tr>
+                                        <td>
+                                            <div class="product-info">
+                                                <h5>{{ product.name }}</h5>
+                                                <p class="text-muted">{{ product.description }}</p>
+                                            </div>
+                                        </td>
+                                        <td>{{ product.htPrice }}€</td>
+                                        <td>{{ product.vatRate }}%</td>
+                                        <td>{{ (product.htPrice * (1 + product.vatRate/100))|number_format(2, ',', ' ') }}€</td>
+                                        <td>
+                                            <form action="{{ path('app_cart_remove', {'id': product.id}) }}" method="post" class="d-inline">
+                                                <button type="submit" class="btn btn-danger btn-sm">
+                                                    <i class="fas fa-trash"></i>
+                                                </button>
+                                            </form>
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="card cart-summary">
+                    <div class="card-body">
+                        <h5 class="card-title">Récapitulatif</h5>
+                        <div class="summary-item">
+                            <span>Total HT:</span>
+                            <span>{{ totalHT|number_format(2, ',', ' ') }}€</span>
+                        </div>
+                        <div class="summary-item">
+                            <span>TVA:</span>
+                            <span>{{ (totalTTC - totalHT)|number_format(2, ',', ' ') }}€</span>
+                        </div>
+                        <div class="summary-item total">
+                            <span>Total TTC:</span>
+                            <span>{{ totalTTC|number_format(2, ',', ' ') }}€</span>
+                        </div>
+                        <button class="btn btn-primary btn-block w-100 mt-3">
+                            Procéder au paiement
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% else %}
+        <div class="empty-cart text-center">
+            <i class="fas fa-shopping-cart fa-4x mb-3"></i>
+            <h3>Votre panier est vide</h3>
+            <p>Découvrez nos produits et commencez vos achats</p>
+            <a href="{{ path('app_home') }}" class="btn btn-primary">
+                Continuer mes achats
+            </a>
+        </div>
+    {% endif %}
+</div>
+{% endblock %} 
