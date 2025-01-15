@@ -21,7 +21,7 @@
                     <i class="fas fa-store text-primary me-2"></i>
                     E-Boutique
                 </a>
-                
+
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent">
                     <span class="navbar-toggler-icon"></span>
                 </button>
@@ -48,7 +48,7 @@
                         <li class="nav-item">
                             <a class="nav-link" href="#">Contact</a>
                         </li>
-                    
+
                     </ul>
 
                     <form class="d-flex me-3">
@@ -66,7 +66,7 @@
                                 <i class="fas fa-shopping-cart"></i>
                                 {% if app.user.cart is not null and app.user.cart.products is not empty %}
                                     <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
-                                        {{ app.user.cart.products|length }}
+                                        {{ app.user.cart.quantity }}
                                     </span>
                                 {% endif %}
                             </a>
