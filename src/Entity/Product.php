@@ -34,6 +34,7 @@ class Product
      * @var Collection<int, Order>
      */
     #[ORM\ManyToMany(targetEntity: Order::class, inversedBy: 'products')]
+    #[ORM\JoinColumn(nullable: false)]
     private Collection $orders;
 
     /**
