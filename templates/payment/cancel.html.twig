@@ -1,0 +1,25 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Paiement annulé{% endblock %}
+
+{% block body %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6 text-center">
+            <div class="card">
+                <div class="card-body">
+                    <i class="fas fa-times-circle text-danger fa-5x mb-3"></i>
+                    <h1 class="card-title">Paiement annulé</h1>
+                    <p class="card-text">
+                        Le paiement a été annulé.<br>
+                        Vous pouvez réessayer ou revenir plus tard.
+                    </p>
+                    <a href="{{ path('app_cart_user') }}" class="btn btn-primary">
+                        Retour au panier
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 

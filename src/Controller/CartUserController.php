@@ -41,10 +41,7 @@ class CartUserController extends AbstractController
     }
 
     #[Route('/add-to-cart/{id}', name: 'app_cart_add', methods: ['POST'])]
-    public function addToCart(
-        Request $request,
-        Product $product,
-        EntityManagerInterface $entityManager,
+    public function addToCart(Request $request, Product $product, EntityManagerInterface $entityManager,
         CartRepository $cartRepository,
     ): Response {
         $user = $this->getUser();

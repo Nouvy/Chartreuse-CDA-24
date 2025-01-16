@@ -1,0 +1,79 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Détails de la commande{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ asset('assets/css/orders.css') }}">
+{% endblock %}
+
+{% block body %}
+<div class="container py-5">
+    <div class="mb-4">
+        <a href="{{ path('app_orders_user') }}" class="btn btn-link text-decoration-none">
+            <i class="fas fa-arrow-left me-2"></i>
+            Retour aux commandes
+        </a>
+    </div>
+
+    <div class="card">
+        <div class="card-body">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h1 class="h3 mb-0">Commande #{{ order.id }}</h1>
+                <span class="badge {% if order.status %}bg-success{% else %}bg-warning{% endif %}">
+                    {% if order.status %}Payée{% else %}En attente{% endif %}
+                </span>
+            </div>
+
+            <div class="row mb-4">
+                <div class="col-md-6">
+                    <h5 class="text-muted mb-3">Informations</h5>
+                    <p class="mb-1">
+                        <i class="far fa-calendar-alt me-2"></i>
+                        Date : {{ order.orderDate|date('d/m/Y H:i') }}
+                    </p>
+                    <p class="mb-1">
+                        <i class="far fa-credit-card me-2"></i>
+                        Paiement : {{ order.payment.paymentMethod|capitalize }}
+                    </p>
+                    <p class="mb-0">
+                        <i class="fas fa-box me-2"></i>
+                        Nombre d'articles : {{ order.quantity }}
+                    </p>
+                </div>
+            </div>
+
+            <h5 class="text-muted mb-3">Produits</h5>
+            <div class="table-responsive">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Produit</th>
+                            <th class="text-end">Prix TTC</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for product in order.products %}
+                            <tr>
+                                <td>
+                                    <div class="product-info">
+                                        <h6 class="mb-0">{{ product.name }}</h6>
+                                        <small class="text-muted">{{ product.description }}</small>
+                                    </div>
+                                </td>
+                                <td class="text-end">{{ (product.htPrice * (1 + product.vatRate/100))|number_format(2, ',', ' ') }}€</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <th>Total</th>
+                            <th class="text-end">{{ (order.payment.amount / 100)|number_format(2, ',', ' ') }}€</th>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 

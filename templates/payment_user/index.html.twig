@@ -14,10 +14,22 @@
             <div class="card payment-card">
                 <div class="card-body">
                     <h1 class="card-title text-center mb-4">Paiement sécurisé</h1>
-                    
-                    <form action="{{ path('app_checkout') }}" method="POST" id="payment-form">
+
+                    {% for label, messages in app.flashes %}
+                        {% for message in messages %}
+                            <div class="alert alert-{{ label }} alert-dismissible fade show">
+                                {{ message }}
+                                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                            </div>
+                        {% endfor %}
+                    {% endfor %}
+
+                    <form action="{{ path('app_payment_user_checkout') }}" method="POST" id="payment-form">
                         <div class="shipping-address mb-4">
-                            <h5>Adresse de livraison</h5>
+                            <h5 class="section-title">
+                                <i class="fas fa-shipping-fast me-2"></i>
+                                Adresse de livraison
+                            </h5>
                             <div class="row g-3">
                                 <div class="col-12">
                                     <label for="fullName" class="form-label">Nom complet</label>
@@ -47,35 +59,51 @@
                         </div>
 
                         <div class="order-summary mb-4">
-                            <h5>Récapitulatif de la commande</h5>
+                            <h5 class="section-title">
+                                <i class="fas fa-shopping-cart me-2"></i>
+                                Récapitulatif de la commande
+                            </h5>
                             <div class="table-responsive">
                                 <table class="table">
                                     <thead>
                                         <tr>
                                             <th>Produit</th>
-                                            <th>Prix TTC</th>
+                                            <th class="text-end">Prix TTC</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         {% for product in cart.products %}
                                             <tr>
-                                                <td>{{ product.name }}</td>
-                                                <td>{{ (product.htPrice * (1 + product.vatRate/100))|number_format(2, ',', ' ') }}€</td>
+                                                <td>
+                                                    <div class="product-info">
+                                                        <h6 class="mb-0">{{ product.name }}</h6>
+                                                        <small class="text-muted">{{ product.description }}</small>
+                                                    </div>
+                                                </td>
+                                                <td class="text-end">{{ (product.htPrice * (1 + product.vatRate/100))|number_format(2, ',', ' ') }}€</td>
                                             </tr>
                                         {% endfor %}
                                     </tbody>
                                     <tfoot>
                                         <tr>
                                             <th>Total</th>
-                                            <th>{{ total|number_format(2, ',', ' ') }}€</th>
+                                            <th class="text-end">{{ total|number_format(2, ',', ' ') }}€</th>
                                         </tr>
                                     </tfoot>
                                 </table>
                             </div>
                         </div>
 
-                        <div class="payment-methods">
-                            <h5>Paiement</h5>
+                        <div class="payment-section">
+                            <h5 class="section-title">
+                                <i class="fas fa-credit-card me-2"></i>
+                                Paiement
+                            </h5>
+                            <div class="payment-info mb-3">
+                                <p class="text-muted">
+                                    Vous serez redirigé vers une page sécurisée pour effectuer votre paiement.
+                                </p>
+                            </div>
                             <button type="submit" class="btn btn-primary btn-lg w-100">
                                 Payer {{ total|number_format(2, ',', ' ') }}€
                             </button>
@@ -87,8 +115,10 @@
                             <i class="fas fa-lock me-2"></i>
                             <span>Paiement sécurisé par Stripe</span>
                         </div>
-                        <div class="text-center mt-2">
-                            <img src="{{ asset('images/payment-methods.png') }}" alt="Méthodes de paiement" class="img-fluid">
+                        <div class="payment-methods-icons text-center mt-3">
+                            <i class="fab fa-cc-visa fa-2x mx-2"></i>
+                            <i class="fab fa-cc-mastercard fa-2x mx-2"></i>
+                            <i class="fab fa-cc-amex fa-2x mx-2"></i>
                         </div>
                     </div>
                 </div>
@@ -96,4 +126,4 @@
         </div>
     </div>
 </div>
-{% endblock %}
+{% endblock %} 

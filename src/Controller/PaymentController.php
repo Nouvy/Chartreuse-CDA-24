@@ -9,13 +9,14 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
-#[Route('/payment')]
-#[IsGranted('ROLE_ADMIN', message: 'Accès Interdit')]
-final class PaymentController extends AbstractController{
-    #[Route(name: 'app_payment_index', methods: ['GET'])]
+#[Route('/admin/payment')]
+#[IsGranted('ROLE_ADMIN')]
+class PaymentController extends AbstractController
+{
+    #[Route('/', name: 'app_payment_index', methods: ['GET'])]
     public function index(PaymentRepository $paymentRepository): Response
     {
         return $this->render('payment/index.html.twig', [
@@ -72,7 +73,7 @@ final class PaymentController extends AbstractController{
     #[Route('/{id}', name: 'app_payment_delete', methods: ['POST'])]
     public function delete(Request $request, Payment $payment, EntityManagerInterface $entityManager): Response
     {
-        if ($this->isCsrfTokenValid('delete'.$payment->getId(), $request->getPayload()->getString('_token'))) {
+        if ($this->isCsrfTokenValid('delete'.$payment->getId(), $request->request->get('_token'))) {
             $entityManager->remove($payment);
             $entityManager->flush();
         }

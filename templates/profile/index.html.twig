@@ -1,0 +1,97 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Mon Profil{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ asset('assets/css/profile.css') }}">
+{% endblock %}
+
+{% block body %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card profile-card">
+                <div class="card-body">
+                    <div class="text-center mb-4">
+                        <div class="profile-avatar">
+                            <i class="fas fa-user-circle fa-4x"></i>
+                        </div>
+                        <h1 class="h3 mt-3">Mon Profil</h1>
+                    </div>
+
+                    {% for label, messages in app.flashes %}
+                        {% for message in messages %}
+                            <div class="alert alert-{{ label }} alert-dismissible fade show">
+                                {{ message }}
+                                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                            </div>
+                        {% endfor %}
+                    {% endfor %}
+
+                    {{ form_start(form, {'attr': {'class': 'profile-form'}}) }}
+                        <div class="mb-4">
+                            <h5 class="section-title">
+                                <i class="fas fa-user me-2"></i>
+                                Informations personnelles
+                            </h5>
+                            
+                            <div class="mb-3">
+                                {{ form_label(form.email) }}
+                                {{ form_widget(form.email) }}
+                                {{ form_errors(form.email) }}
+                            </div>
+
+                            <div class="mb-3">
+                                {{ form_label(form.plainPassword) }}
+                                {{ form_widget(form.plainPassword) }}
+                                {{ form_errors(form.plainPassword) }}
+                            </div>
+                        </div>
+
+                        <div class="mb-4">
+                            <h5 class="section-title">
+                                <i class="fas fa-shopping-bag me-2"></i>
+                                Statistiques
+                            </h5>
+                            <div class="row stats">
+                                <div class="col-md-4">
+                                    <div class="stat-item">
+                                        <div class="stat-value">{{ user.orders|length }}</div>
+                                        <div class="stat-label">Commandes</div>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="stat-item">
+                                        <div class="stat-value">
+                                            {% if user.cart %}
+                                                {{ user.cart.products|length }}
+                                            {% else %}
+                                                0
+                                            {% endif %}
+                                        </div>
+                                        <div class="stat-label">Articles dans le panier</div>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="stat-item">
+                                        <div class="stat-value">{{ user.addresses|length }}</div>
+                                        <div class="stat-label">Adresses enregistrées</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="text-center">
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-save me-2"></i>
+                                Enregistrer les modifications
+                            </button>
+                        </div>
+                    {{ form_end(form) }}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 

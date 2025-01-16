@@ -1,0 +1,56 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Paiement réussi{% endblock %}
+
+{% block body %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-body text-center">
+                    <i class="fas fa-check-circle text-success fa-5x mb-3"></i>
+                    <h1 class="card-title">Commande confirmée !</h1>
+                    <p class="card-text">
+                        Votre commande #{{ order.id }} a été validée avec succès.<br>
+                        Un email de confirmation vous a été envoyé.
+                    </p>
+
+                    <div class="order-details mt-4">
+                        <h5>Détails de la commande</h5>
+                        <div class="table-responsive">
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th>Produit</th>
+                                        <th>Prix TTC</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for product in order.products %}
+                                        <tr>
+                                            <td>{{ product.name }}</td>
+                                            <td>{{ (product.htPrice * (1 + product.vatRate/100))|number_format(2, ',', ' ') }}€</td>
+                                        </tr>
+                                    {% endfor %}
+                                </tbody>
+                                <tfoot>
+                                    <tr>
+                                        <th>Total</th>
+                                        <th>{{ (order.payment.amount / 100)|number_format(2, ',', ' ') }}€</th>
+                                    </tr>
+                                </tfoot>
+                            </table>
+                        </div>
+                    </div>
+
+                    <div class="mt-4">
+                        <a href="{{ path('app_home') }}" class="btn btn-primary">
+                            Retour à l'accueil
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 

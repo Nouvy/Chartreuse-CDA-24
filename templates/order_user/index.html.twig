@@ -1,0 +1,71 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Mes commandes{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ asset('assets/css/orders.css') }}">
+{% endblock %}
+
+{% block body %}
+<div class="container py-5">
+    <h1 class="mb-4">Mes commandes</h1>
+
+    {% if orders|length > 0 %}
+        <div class="row">
+            {% for order in orders %}
+                <div class="col-md-6 mb-4">
+                    <div class="card order-card h-100">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between align-items-center mb-3">
+                                <h5 class="card-title mb-0">
+                                    Commande #{{ order.id }}
+                                </h5>
+                                <span class="badge {% if order.status %}bg-success{% else %}bg-warning{% endif %}">
+                                    {% if order.status %}Payée{% else %}En attente{% endif %}
+                                </span>
+                            </div>
+                            
+                            <p class="text-muted mb-3">
+                                <i class="far fa-calendar-alt me-2"></i>
+                                {{ order.orderDate|date('d/m/Y H:i') }}
+                            </p>
+
+                            <div class="order-summary mb-3">
+                                <div class="row">
+                                    <div class="col">
+                                        <small class="text-muted">Produits</small>
+                                        <p class="mb-0">{{ order.products|length }}</p>
+                                    </div>
+                                    <div class="col">
+                                        <small class="text-muted">Total</small>
+                                        <p class="mb-0">{{ (order.payment.amount / 100)|number_format(2, ',', ' ') }}€</p>
+                                    </div>
+                                    <div class="col">
+                                        <small class="text-muted">Paiement</small>
+                                        <p class="mb-0">{{ order.payment.paymentMethod|capitalize }}</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <a href="{{ path('app_orders_user_show', {'id': order.id}) }}" class="btn btn-outline-primary btn-sm">
+                                Voir les détails
+                                <i class="fas fa-chevron-right ms-2"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="text-center py-5">
+            <i class="fas fa-shopping-bag fa-3x text-muted mb-3"></i>
+            <h3>Aucune commande</h3>
+            <p class="text-muted">Vous n'avez pas encore passé de commande.</p>
+            <a href="{{ path('app_home') }}" class="btn btn-primary">
+                Commencer mes achats
+            </a>
+        </div>
+    {% endif %}
+</div>
+{% endblock %} 

@@ -18,7 +18,7 @@ class Order
     private ?int $id = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
-    private ?\DateTimeInterface $order_date = null;
+    private ?\DateTimeInterface $orderDate = null;
 
     #[ORM\Column]
     private ?bool $status = null;
@@ -43,6 +43,7 @@ class Order
     public function __construct()
     {
         $this->products = new ArrayCollection();
+        $this->orderDate = new \DateTime();
     }
 
     public function getId(): ?int
@@ -52,13 +53,12 @@ class Order
 
     public function getOrderDate(): ?\DateTimeInterface
     {
-        return $this->order_date;
+        return $this->orderDate;
     }
 
-    public function setOrderDate(\DateTimeInterface $order_date): static
+    public function setOrderDate(\DateTimeInterface $orderDate): static
     {
-        $this->order_date = $order_date;
-
+        $this->orderDate = $orderDate;
         return $this;
     }
 
@@ -70,7 +70,6 @@ class Order
     public function setStatus(bool $status): static
     {
         $this->status = $status;
-
         return $this;
     }
 
@@ -82,7 +81,6 @@ class Order
     public function setQuantity(int $quantity): static
     {
         $this->quantity = $quantity;
-
         return $this;
     }
 
@@ -94,7 +92,6 @@ class Order
     public function setUser(?User $user): static
     {
         $this->user = $user;
-
         return $this;
     }
 
@@ -105,13 +102,7 @@ class Order
 
     public function setPayment(Payment $payment): static
     {
-        // set the owning side of the relation if necessary
-        if ($payment->getOrderProduct() !== $this) {
-            $payment->setOrderProduct($this);
-        }
-
         $this->payment = $payment;
-
         return $this;
     }
 
@@ -129,7 +120,6 @@ class Order
             $this->products->add($product);
             $product->addOrder($this);
         }
-
         return $this;
     }
 
@@ -138,7 +128,6 @@ class Order
         if ($this->products->removeElement($product)) {
             $product->removeOrder($this);
         }
-
         return $this;
     }
 }
