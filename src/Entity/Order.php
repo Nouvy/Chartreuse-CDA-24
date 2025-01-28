@@ -3,17 +3,28 @@
 namespace App\Entity;
 
 use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\Metadata\Patch;
+use ApiPlatform\Metadata\Post;
 use App\Repository\OrderRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Event\PrePersistEventArgs;
+use Doctrine\ORM\Event\PreUpdateEventArgs;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ApiResource(
     normalizationContext: ['groups' => ['order:read']],
-    denormalizationContext: ['groups' => ['order:write']]
+    denormalizationContext: ['groups' => ['order:write']],
+    operations: [
+        new GetCollection(),
+        new Get(),
+        new Post(),
+        new Patch(),
+    ]
 )]
 #[ORM\Entity(repositoryClass: OrderRepository::class)]
 #[ORM\Table(name: '`order`')]
@@ -221,6 +232,46 @@ class Order
 
         // Configurer les produits
         if (!empty($this->product_ids)) {
+            foreach ($this->product_ids as $productId) {
+                $product = $entityManager->getRepository(Product::class)->find($productId);
+                if ($product) {
+                    $this->addProduct($product);
+                }
+            }
+            $this->setQuantity(count($this->product_ids));
+        }
+    }
+
+    #[ORM\PreUpdate]
+    public function onPreUpdate(PreUpdateEventArgs $args): void
+    {
+        $entityManager = $args->getObjectManager();
+        $changeSet = $args->getEntityChangeSet();
+
+        // Mettre à jour l'utilisateur si user_id a changé
+        if (null !== $this->user_id) {
+            $user = $entityManager->getRepository(User::class)->find($this->user_id);
+            if ($user) {
+                $this->setUser($user);
+            }
+        }
+
+        // Mettre à jour le paiement si payment_id a changé
+        if (null !== $this->payment_id) {
+            $payment = $entityManager->getRepository(Payment::class)->find($this->payment_id);
+            if ($payment) {
+                $this->setPayment($payment);
+            }
+        }
+
+        // Mettre à jour les produits si product_ids a changé
+        if (!empty($this->product_ids)) {
+            // Supprimer les anciens produits
+            foreach ($this->products as $product) {
+                $this->removeProduct($product);
+            }
+
+            // Ajouter les nouveaux produits
             foreach ($this->product_ids as $productId) {
                 $product = $entityManager->getRepository(Product::class)->find($productId);
                 if ($product) {
