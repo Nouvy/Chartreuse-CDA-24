@@ -9,6 +9,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[UniqueEntity(fields: ['email'], message: 'Il existe déjà un compte avec cet email')]
@@ -35,6 +36,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?Cart $cart = null;
 
     #[ORM\OneToMany(mappedBy: 'user', targetEntity: Order::class)]
+    #[Groups(['user:read'])]
     private Collection $orders;
 
     #[ORM\OneToMany(mappedBy: 'user', targetEntity: Address::class)]
@@ -46,11 +48,13 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->addresses = new ArrayCollection();
     }
 
+    #[Groups(['order:read'])]
     public function getId(): ?int
     {
         return $this->id;
     }
 
+    #[Groups(['order:read'])]
     public function getEmail(): ?string
     {
         return $this->email;

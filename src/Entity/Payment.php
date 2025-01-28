@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use App\Repository\PaymentRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: PaymentRepository::class)]
 class Payment
@@ -11,15 +12,19 @@ class Payment
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(['order:read'])]
     private ?int $id = null;
 
     #[ORM\Column]
+    #[Groups(['order:read'])]
     private ?int $amount = null;
 
     #[ORM\Column]
+    #[Groups(['order:read'])]
     private ?bool $status = null;
 
     #[ORM\Column(length: 50)]
+    #[Groups(['order:read'])]
     private ?string $payment_method = null;
 
     #[ORM\OneToOne(mappedBy: 'payment', cascade: ['persist', 'remove'])]
